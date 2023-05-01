@@ -69,10 +69,7 @@ const Slider = styled.span<{ checked: boolean }>`
     transition: 0.4s;
     box-shadow: 0 0px 15px #2020203d;
     background: white
-      url(${({ checked }) =>
-        checked
-          ? 'https://i.ibb.co/7JfqXxB/sunny.png'
-          : 'https://i.ibb.co/FxzBYR9/night.png'});
+      url(${({ checked }) => checked? 'https://i.ibb.co/7JfqXxB/sunny.png': 'https://i.ibb.co/FxzBYR9/night.png'});
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 50%;
