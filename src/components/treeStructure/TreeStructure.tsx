@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import 'boxicons';
+import Arrow from '../../assets/image/right-arrow.png';
+import ThemeSwitcher from '../themeSwitcher/ThemeSwitcher';
 import * as Styles from './style';
 
 const files = {
@@ -33,38 +35,47 @@ type TEntry = {
   name: string;
   children?: TEntry[];
 };
-
-const TreeStructure = () => {
-  const Entry = ({ entry, depth }: { entry: TEntry; depth: number }) => {
-    const [collapse, setCollapse] = useState(false);
-
-    return (
-      <div>
-        {entry.children ? (
-          <Styles.Button onClick={() => setCollapse(!collapse)}>
-            {collapse ? '-' : '+'} {entry.name}
-          </Styles.Button>
-        ) : (
-          <div>{entry.name}</div>
-        )}
-
-        {collapse && (
-          <Styles.NestedChildren paddingLeft={depth * 10}>
-            {entry.children?.map((entry) => (
-              <Entry entry={entry} depth={depth + 1} key={entry.name} />
-            ))}
-          </Styles.NestedChildren>
-        )}
-      </div>
-    );
-  };
+const Entry = ({ entry, depth }: { entry: TEntry; depth: number }) => {
+  const [collapse, setCollapse] = useState(false);
 
   return (
     <div>
-      {files.children.map((entry) => (
-        <Entry entry={entry} depth={1} key={entry.name} />
-      ))}
+      {entry.children ? (
+        <Styles.Button onClick={() => setCollapse(!collapse)}>
+          <Styles.ArrowImage collapse={collapse} src={Arrow} alt='' />
+          <Styles.FolderName>{entry.name}</Styles.FolderName>
+        </Styles.Button>
+      ) : (
+        <Styles.FolderName>{entry.name}</Styles.FolderName>
+      )}
+
+      {collapse && (
+        <Styles.NestedChildren paddingLeft={depth * 10}>
+          {entry.children?.map((entry) => (
+            <Entry entry={entry} depth={depth + 1} key={entry.name} />
+          ))}
+        </Styles.NestedChildren>
+      )}
     </div>
+  );
+};
+
+const TreeStructure = () => {
+  const [theme, setTheme] = useState(false);
+
+  const handleThemeToggle = (theme: boolean) => {
+    setTheme(theme);
+  };
+
+  return (
+    <>
+      <ThemeSwitcher handleThemeToggle={handleThemeToggle} />
+      <Styles.AppContainer theme={theme}>
+        {files.children.map((entry) => (
+          <Entry entry={entry} depth={1} key={entry.name} />
+        ))}
+      </Styles.AppContainer>
+    </>
   );
 };
 
